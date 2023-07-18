@@ -1,0 +1,41 @@
+{
+  "name": "spoticry",
+  "version": "1.0.0",
+  "description": "SpotiCry - Um lugar onde todas as músicas tristes são reproduzidas",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./build/index.js",
+    "build": "tsc",
+    "dev": "tsnd src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FlavioAAMotta/SpotiCry.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FlavioAAMotta/SpotiCry/issues"
+  },
+  "homepage": "https://github.com/FlavioAAMotta/SpotiCry#readme",
+  "devDependencies": {
+    "@types/cors": "^2.8.13",
+    "@types/express": "^4.17.17",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/dotenv": "^8.2.0",
+    "@types/jsonwebtoken": "^9.0.2",
+    "@types/uuid": "^9.0.2",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "firebase-admin": "^11.10.1",
+    "knex": "^2.5.1",
+    "net": "^1.0.2"
+  }
+}
