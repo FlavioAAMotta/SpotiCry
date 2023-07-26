@@ -1,37 +1,59 @@
 export type songData = {
-    id: string
-}
-
-export default class Song {
-    public get duration(): number {
-        return this._duration
-    }
-    public set duration(value: number) {
-        this._duration = value
-    }
+    id: string;
+    title: string;
+    artist: string;
+    url: string;
+    userId?: string;
+  };
+  
+  export default class Song {
+    constructor(
+      private _id: string,
+      private _title: string,
+      private _artist: string,
+      private _url: string,
+      private _userId?: string
+    ) {}
+  
     public get artist(): string {
-        return this._artist
+      return this._artist;
     }
     public set artist(value: string) {
-        this._artist = value
+      this._artist = value;
     }
     public get title(): string {
-        return this._title
+      return this._title;
     }
     public set title(value: string) {
-        this._title = value
+      this._title = value;
+    }
+    public get url(): string {
+      return this._url;
+    }
+    public set url(value: string) {
+      this._url = value;
+    }
+    public get userId(): string | undefined {
+      return this._userId;
+    }
+    public set userId(value: string) {
+      this._userId = value;
     }
     public get id(): string {
-        return this._id
+      return this._id;
     }
     public set id(value: string) {
-        this._id = value
+      this._id = value;
     }
-    
-    constructor(
-        private _id: string,
-        private _title: string,
-        private _artist: string,
-        private _duration: number
-    ){}
-}
+  
+    toJSON(): songData {
+      return {
+        id: this.id,
+        title: this.title,
+        artist: this.artist,
+        url: this.url,
+        userId: this.userId,
+      };
+    }
+  }
+  

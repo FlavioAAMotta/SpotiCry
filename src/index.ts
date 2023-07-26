@@ -4,6 +4,7 @@ import express from "express";
 import { AddressInfo } from "net";
 import { playlistRouter } from "./routes/playlistRouter";
 import { userRouter } from "./routes/userRouter";
+import { songRouter } from "./routes/songRouter";
 
 dotenv.config();
 
@@ -13,6 +14,7 @@ app.use(express.json());
 
 app.use("/playlist", playlistRouter);
 app.use("/user", userRouter);
+app.use("/song", songRouter);
 
 const server = app.listen(process.env.PORT || 3003, () => {
   if (server) {
