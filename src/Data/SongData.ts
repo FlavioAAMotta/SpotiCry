@@ -14,10 +14,11 @@ export default class SongData implements ISongData {
         }
         const songData = song.data();
         return new Song(
-          songData?.id,
+          id,
           songData?.title,
           songData?.artist,
-          songData?.url
+          songData?.url,
+          songData?.userId
         );
       });
     } catch (error: any) {
@@ -49,6 +50,15 @@ export default class SongData implements ISongData {
         return undefined;
       }
       return song.docs[0].data() as Song;
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async deleteSong(id: string): Promise<void> {
+    try {
+      const docRef = db.collection("song").doc(id);
+      await docRef.delete();
     } catch (error: any) {
       throw new Error(error.message);
     }

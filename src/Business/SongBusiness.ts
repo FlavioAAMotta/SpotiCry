@@ -69,4 +69,30 @@ export class SongBusiness {
       throw new Error(error.message);
     }
   };
+
+  deleteSong = async (id: string, token: string): Promise<void> => {
+    try {
+      if (!id) {
+        throw new Error("Missing input");
+      }
+      if (!token) {
+        throw new Error("Missing authorization token");
+      }
+      const user = this.authenticator.getTokenData(token);
+      if (!user) {
+        throw new Error("Unauthorized");
+      }
+      const song = await this.songData.getSongById(id);
+      if (!song) {
+        throw new Error("Song not found");
+      }
+      if (song.userId !== user.id) {
+        throw new Error("Only the owner can delete the song");
+      }
+
+      await this.songData.deleteSong(id);
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  };
 }

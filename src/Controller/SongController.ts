@@ -26,4 +26,15 @@ export class SongController{
             res.status(error.statusCode || 400).send({ error: error.message });
         }
     }
+
+    deleteSong = async (req: Request, res: Response): Promise<void> => {
+        try {
+            const id = req.params.id;
+            const token = req.headers.authorization as string;
+            await this.songBusiness.deleteSong(id, token);
+            res.status(200).send({ message: "Song deleted successfully" });
+        } catch (error: any) {
+            res.status(error.statusCode || 400).send({ error: error.message });
+        }
+    }
 }
