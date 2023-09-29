@@ -37,4 +37,26 @@ export class SongController{
             res.status(error.statusCode || 400).send({ error: error.message });
         }
     }
+
+    getAllSongs = async (req: Request, res: Response): Promise<void> => {
+        try {
+            const token = req.headers.authorization as string;
+            const songs = await this.songBusiness.getAllSongs(token);
+            res.status(200).send({ songs });
+        } catch (error: any) {
+            res.status(error.statusCode || 400).send({ error: error.message });
+        }
+    }
+
+    editSong = async (req: Request, res: Response): Promise<void> => {
+        try {
+            const id = req.params.id;
+            const token = req.headers.authorization as string;
+            const { title, artist, url } = req.body;
+            await this.songBusiness.editSong(id, token, title, artist, url);
+            res.status(200).send({ message: "Song edited successfully" });
+        } catch (error: any) {
+            res.status(error.statusCode || 400).send({ error: error.message });
+        }
+    }
 }

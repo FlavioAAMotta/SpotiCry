@@ -40,9 +40,13 @@ export default class SongData implements ISongData {
     }
   }
 
-  async getSongByTitleAndArtist(title: string, artist: string): Promise<Song | undefined> {
+  async getSongByTitleAndArtist(
+    title: string,
+    artist: string
+  ): Promise<Song | undefined> {
     try {
-      const song = await db.collection("song")
+      const song = await db
+        .collection("song")
         .where("title", "==", title)
         .where("artist", "==", artist)
         .get();
@@ -59,6 +63,42 @@ export default class SongData implements ISongData {
     try {
       const docRef = db.collection("song").doc(id);
       await docRef.delete();
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getAllSongs(): Promise<Song[]> {
+    try {
+      const songs = await db.collection("song").get();
+      return songs.docs.map((song: any) => {
+        const songData = song.data();
+        return new Song(
+          song.id,
+          songData.title,
+          songData.artist,
+          songData.url,
+          songData.userId
+        );
+      });
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async editSong(
+    id: string,
+    title: string,
+    artist: string,
+    url: string
+  ): Promise<void> {
+    try {
+      const docRef = db.collection("song").doc(id);
+      await docRef.update({
+        title,
+        artist,
+        url,
+      });
     } catch (error: any) {
       throw new Error(error.message);
     }

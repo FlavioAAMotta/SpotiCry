@@ -1,3 +1,4 @@
+import { CustomError } from "../Utils/CustomError";
 import { formatString } from "../Utils/StringFormatter";
 import { ISongData } from "../model/InterfaceSongData";
 import Song from "../model/Song";
@@ -95,4 +96,51 @@ export class SongBusiness {
       throw new Error(error.message);
     }
   };
+
+  getAllSongs = async (token: string): Promise<Song[]> => {
+    try {
+      if (!token) {
+        throw new Error("Missing authorization token");
+      }
+      const user = this.authenticator.getTokenData(token);
+      if (!user) {
+        throw new Error("Unauthorized");
+      }
+      const songs = await this.songData.getAllSongs();
+      return songs;
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  editSong = async (id: string, token: string, title: string, artist: string, url: string): Promise<void> => {
+    try {
+      if (!id || !token || (!title && !artist && !url)) {
+        throw new CustomError("Missing input", 422);
+      }
+      const user = this.authenticator.getTokenData(token);
+      if (!user) {
+        throw new CustomError("Unauthorized", 401);
+      }
+      const song = await this.songData.getSongById(id);
+      if (!song) {
+        throw new CustomError("Song not found", 404);
+      }
+      if (song.userId !== user.id) {
+        throw new CustomError("Only the owner can edit the song", 401);
+      }
+
+      title = formatString(title);
+      artist = formatString(artist);
+
+      const songWithSameTitleAndArtist = await this.songData.getSongByTitleAndArtist(title, artist);
+      if (songWithSameTitleAndArtist) {
+        throw new CustomError("Song already exists", 409);
+      }
+
+      await this.songData.editSong(id, title, artist, url);
+    } catch (error: any) {
+      throw new CustomError(error.message, error.statusCode);
+    }
+  }
 }

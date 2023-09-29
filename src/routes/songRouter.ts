@@ -14,3 +14,5 @@ const songController = new SongController(songBusiness);
 songRouter.post("/create", songController.createSong);
 songRouter.get("/:id", songController.getSongById);
 songRouter.delete("/:id", songController.deleteSong);
+songRouter.get("/", songController.getAllSongs);
+songRouter.put("/edit/:id", songController.editSong);

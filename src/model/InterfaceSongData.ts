@@ -5,4 +5,6 @@ export interface ISongData{
     getSongById(id:string):Promise<Song>;
     getSongByTitleAndArtist(title:string, artist:string):Promise<Song | undefined>;
     deleteSong(id:string):Promise<void>;
+    getAllSongs():Promise<Song[]>;
+    editSong(id:string, title:string, artist:string, url:string):Promise<void>;
 }
