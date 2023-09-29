@@ -76,4 +76,133 @@ export class PlaylistBusiness {
       throw new Error(error.message);
     }
   };
+
+  getAllPlaylists = async (token: string): Promise<Playlist[]> => {
+    try {
+      if (!token) {
+        throw new Error("Missing authorization token");
+      }
+      const user = this.authenticator.getTokenData(token);
+      if (!user) {
+        throw new Error("Unauthorized");
+      }
+
+      const playlists = await this.playlistData.getAllPlaylists();
+      return playlists;
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  getPlaylistByTitle = async (title: string, token: string): Promise<Playlist[]> => {
+    try {
+      if (!title) {
+        throw new Error("Missing input");
+      }
+      if (!token) {
+        throw new Error("Missing authorization token");
+      }
+      const user = this.authenticator.getTokenData(token);
+      if (!user) {
+        throw new Error("Unauthorized");
+      }
+
+      const playlists = await this.playlistData.getPlaylistByTitle(title);
+      return playlists;
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  };
+
+  getPlaylistSongs = async (id: string, token: string): Promise<string[]> => {
+    try {
+      if (!id) {
+        throw new Error("Missing input");
+      }
+      if (!token) {
+        throw new Error("Missing authorization token");
+      }
+      const user = this.authenticator.getTokenData(token);
+      if (!user) {
+        throw new Error("Unauthorized");
+      }
+
+      const playlist = await this.playlistData.getPlaylistById(id);
+      const songs = playlist.songs;
+      return songs;
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  };
+
+  addSongToPlaylist = async (
+    playlistId: string,
+    songId: string,
+    token: string
+  ): Promise<void> => {
+    try {
+      if (!playlistId || !songId) {
+        throw new Error("Missing input");
+      }
+      if (!token) {
+        throw new Error("Missing authorization token");
+      }
+      const user = this.authenticator.getTokenData(token);
+      if (!user) {
+        throw new Error("Unauthorized");
+      }
+
+      const playlist = await this.playlistData.getPlaylistById(playlistId);
+      const songs = playlist.songs;
+      songs.push(songId);
+      await this.playlistData.updatePlaylistSongs(playlistId, songs);
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  };
+
+  deletePlaylist = async (id: string, token: string): Promise<void> => {
+    try {
+      if (!id) {
+        throw new Error("Missing input");
+      }
+      if (!token) {
+        throw new Error("Missing authorization token");
+      }
+      const user = this.authenticator.getTokenData(token);
+      if (!user) {
+        throw new Error("Unauthorized");
+      }
+
+      await this.playlistData.deletePlaylist(id);
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  };
+
+  removeSongFromPlaylist = async (
+    playlistId: string,
+    songId: string,
+    token: string
+  ): Promise<void> => {
+    try {
+      if (!playlistId || !songId) {
+        throw new Error("Missing input");
+      }
+      if (!token) {
+        throw new Error("Missing authorization token");
+      }
+      const user = this.authenticator.getTokenData(token);
+      if (!user) {
+        throw new Error("Unauthorized");
+      }
+
+      const playlist = await this.playlistData.getPlaylistById(playlistId);
+      const songs = playlist.songs;
+      const filteredSongs = songs.filter((song) => song !== songId);
+      await this.playlistData.updatePlaylistSongs(playlistId, filteredSongs);
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  };
 }

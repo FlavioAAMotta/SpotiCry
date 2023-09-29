@@ -17,3 +17,9 @@ const playlistController = new PlaylistController(playlistBusiness);
 
 playlistRouter.post("/", playlistController.createPlaylist);
 playlistRouter.get("/:id", playlistController.getPlaylistById);
+playlistRouter.get("/", playlistController.getAllPlaylists);
+playlistRouter.get("/search/:title", playlistController.getPlaylistByTitle);
+playlistRouter.get("/songs/:id", playlistController.getPlaylistSongs);
+playlistRouter.post("/addSong", playlistController.addSongToPlaylist);
+playlistRouter.delete("/:id", playlistController.deletePlaylist);
+playlistRouter.delete("/removeSong/:id", playlistController.removeSongFromPlaylist);
