@@ -46,15 +46,17 @@ export class UserBusiness {
         throw new Error("Campos inválidos");
       }
 
+      console.log(`email: ${email}`)	
       const user = await this.userData.findByEmail(email);
+      console.log(`user: ${user}`)
       if (!user) {
         throw new Error("Usuário não encontrado");
       }
-
       const passwordIsCorrect = await this.hashManager.compare(
         password,
         user.password
       );
+      console.log(`passwordIsCorrect: ${passwordIsCorrect}`)
       if (!passwordIsCorrect) {
         throw new Error("Senha incorreta");
       }

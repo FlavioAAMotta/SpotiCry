@@ -46,7 +46,6 @@ export class PlaylistController {
       res.status(error.statusCode || 400).send({ error: error.message });
     }
   };
-
   getPlaylistSongs = async (req: Request, res: Response): Promise<void> => {
     try {
       const id = req.params.id;
@@ -57,17 +56,19 @@ export class PlaylistController {
       res.status(error.statusCode || 400).send({ error: error.message });
     }
   };
-
+  
   addSongToPlaylist = async (req: Request, res: Response): Promise<void> => {
     try {
       const token = req.headers.authorization as string;
-      const { playlistId, songId } = req.body;
-      await this.playlistBusiness.addSongToPlaylist(playlistId, songId, token);
+      const id = req.params.id;
+      const { songId } = req.body;
+      await this.playlistBusiness.addSongToPlaylist(id, songId, token);
       res.status(200).send({ message: "Song added to playlist successfully" });
     } catch (error: any) {
       res.status(error.statusCode || 400).send({ error: error.message });
     }
   };
+
 
   deletePlaylist = async (req: Request, res: Response): Promise<void> => {
     try {
@@ -79,11 +80,11 @@ export class PlaylistController {
       res.status(error.statusCode || 400).send({ error: error.message });
     }
   };
-
   removeSongFromPlaylist = async (req: Request, res: Response): Promise<void> => {
     try {
       const token = req.headers.authorization as string;
-      const { playlistId, songId } = req.body;
+      const playlistId = req.params.id;
+      const songId = req.params.songId;
       await this.playlistBusiness.removeSongFromPlaylist(playlistId, songId, token);
       res.status(200).send({ message: "Song removed from playlist successfully" });
     } catch (error: any) {
