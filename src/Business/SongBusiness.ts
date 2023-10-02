@@ -130,8 +130,12 @@ export class SongBusiness {
         throw new CustomError("Only the owner can edit the song", 401);
       }
 
-      title = formatString(title);
-      artist = formatString(artist);
+      if(title) {
+        title = formatString(title);
+      }
+      if(artist) {
+        artist = formatString(artist);
+      }
 
       const songWithSameTitleAndArtist = await this.songData.getSongByTitleAndArtist(title, artist);
       if (songWithSameTitleAndArtist) {

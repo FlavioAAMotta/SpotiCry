@@ -205,4 +205,27 @@ export class PlaylistBusiness {
       throw new Error(error.message);
     }
   };
+
+  updatePlaylist = async (
+    id: string,
+    name: string,
+    description: string,
+    token: string
+  ): Promise<void> => {
+    try {
+      if (!id || (!name && !description)) {
+        throw new Error("Missing input");
+      }
+      if (!token) {
+        throw new Error("Missing authorization token");
+      }
+      const user = this.authenticator.getTokenData(token);
+      if (!user) {
+        throw new Error("Unauthorized");
+      }
+      await this.playlistData.updatePlaylist(id, name, description);
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
 }

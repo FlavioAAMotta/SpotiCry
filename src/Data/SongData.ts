@@ -88,17 +88,23 @@ export default class SongData implements ISongData {
 
   async editSong(
     id: string,
-    title: string,
-    artist: string,
-    url: string
+    title?: string,
+    artist?: string,
+    url?: string
   ): Promise<void> {
     try {
+      const updateData: { [key: string]: string } = {};
+      if (title) {
+        updateData.title = title;
+      }
+      if (artist) {
+        updateData.artist = artist;
+      }
+      if (url) {
+        updateData.url = url;
+      }
       const docRef = db.collection("song").doc(id);
-      await docRef.update({
-        title,
-        artist,
-        url,
-      });
+      await docRef.update(updateData);
     } catch (error: any) {
       throw new Error(error.message);
     }

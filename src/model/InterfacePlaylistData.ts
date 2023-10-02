@@ -9,4 +9,5 @@ export interface IPlaylistData{
     updatePlaylistSongs(id:string, songs:string[]):Promise<void>
     deletePlaylist(id:string):Promise<void>
     removeSongFromPlaylist(id:string, songId:string):Promise<void>
+    updatePlaylist(id:string, title:string, description:string):Promise<void>
 }

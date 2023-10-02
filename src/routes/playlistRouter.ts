@@ -23,3 +23,4 @@ playlistRouter.get("/:id/song", playlistController.getPlaylistSongs);
 playlistRouter.post("/:id/song", playlistController.addSongToPlaylist);
 playlistRouter.delete("/:id", playlistController.deletePlaylist);
 playlistRouter.delete("/:id/song/:songId", playlistController.removeSongFromPlaylist);
+playlistRouter.patch("/:id", playlistController.updatePlaylist);

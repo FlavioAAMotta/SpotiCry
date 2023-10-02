@@ -1,4 +1,4 @@
-import { DocumentSnapshot } from '@google-cloud/firestore';
+import { DocumentSnapshot } from "@google-cloud/firestore";
 import { IPlaylistData } from "../model/InterfacePlaylistData";
 import Playlist from "../model/Playlist";
 import { db } from "./FirebaseConfig";
@@ -45,7 +45,7 @@ export default class PlaylistData implements IPlaylistData {
     try {
       const playlists: Playlist[] = [];
       const playlistsRef = await db.collection("playlist").get();
-      playlistsRef.forEach((playlist:any) => {
+      playlistsRef.forEach((playlist: any) => {
         const playlistData = playlist.data();
         playlists.push(
           new Playlist(
@@ -66,8 +66,11 @@ export default class PlaylistData implements IPlaylistData {
   async getPlaylistByTitle(title: string): Promise<Playlist[]> {
     try {
       const playlists: Playlist[] = [];
-      const playlistsRef = await db.collection("playlist").where("name", "==", title).get();
-      playlistsRef.forEach((playlist:any) => {
+      const playlistsRef = await db
+        .collection("playlist")
+        .where("name", "==", title)
+        .get();
+      playlistsRef.forEach((playlist: any) => {
         const playlistData = playlist.data();
         playlists.push(
           new Playlist(
@@ -141,4 +144,26 @@ export default class PlaylistData implements IPlaylistData {
     }
   }
 
+  async updatePlaylist(
+    id: string,
+    title?: string,
+    description?: string
+  ): Promise<void> {
+    try {
+      const updateData: { [key: string]: string } = {};
+
+      if (title) {
+        updateData.name = title;
+      }
+
+      if (description) {
+        updateData.description = description;
+      }
+
+      const docRef = db.collection("playlist").doc(id);
+      await docRef.update(updateData);
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
 }

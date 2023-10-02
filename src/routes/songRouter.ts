@@ -11,8 +11,8 @@ const songBusiness = new SongBusiness(
 
 const songController = new SongController(songBusiness);
 
-songRouter.post("/create", songController.createSong);
-songRouter.get("/:id", songController.getSongById);
-songRouter.delete("/:id", songController.deleteSong);
 songRouter.get("/", songController.getAllSongs);
-songRouter.put("/edit/:id", songController.editSong);
+songRouter.get("/:id", songController.getSongById);
+songRouter.post("/", songController.createSong);
+songRouter.delete("/:id", songController.deleteSong);
+songRouter.patch("/:id", songController.editSong);
