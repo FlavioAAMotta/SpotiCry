@@ -1,3 +1,4 @@
+import { CustomError } from "../Utils/CustomError";
 import { IUserData } from "../model/InterfaceUserData";
 import User from "../model/User";
 import { Authenticator } from "../services/Authenticator";
@@ -20,12 +21,12 @@ export class UserBusiness {
     try {
       const { name, email, password } = input;
       if (!email || !name || !password) {
-        throw new Error("Campos inválidos");
+        throw new CustomError("Campos inválidos", 422);
       }
 
       const registeredUser = await this.userData.findByEmail(email);
       if (registeredUser) {
-        throw new Error("Email já cadastrado");
+        throw new CustomError("Email já cadastrado", 409);
       }
 
       const id = generateId();
@@ -35,7 +36,7 @@ export class UserBusiness {
       const token = this.authenticator.generateToken({ id });
       return token;
     } catch (error: any) {
-      throw new Error(error.message);
+      throw new CustomError(error.message, error.statusCode);
     }
   };
 
@@ -43,22 +44,20 @@ export class UserBusiness {
     try {
       const { email, password } = input;
       if (!email || !password) {
-        throw new Error("Campos inválidos");
+        throw new CustomError("Campos inválidos", 422);
       }
 
-      console.log(`email: ${email}`)	
       const user = await this.userData.findByEmail(email);
-      console.log(`user: ${user}`)
       if (!user) {
-        throw new Error("Usuário não encontrado");
+        throw new CustomError("Usuário não encontrado", 404);
       }
+
       const passwordIsCorrect = await this.hashManager.compare(
         password,
         user.password
       );
-      console.log(`passwordIsCorrect: ${passwordIsCorrect}`)
       if (!passwordIsCorrect) {
-        throw new Error("Senha incorreta");
+        throw new CustomError("Senha incorreta", 401);
       }
 
       const token = this.authenticator.generateToken({ id: user.id });

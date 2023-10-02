@@ -22,98 +22,103 @@ export class SongBusiness {
   ): Promise<void> => {
     try {
       if (!token) {
-        throw new Error("Missing authorization token");
+        throw new CustomError("Missing authorization token", 422);
       }
       if (!title || !artist || !url) {
-        throw new Error("Missing input");
+        throw new CustomError("Missing input", 422);
       }
       const user = this.authenticator.getTokenData(token);
       if (!user) {
-        throw new Error("Unauthorized");
+        throw new CustomError("Unauthorized", 401);
       }
 
-      // now we need to check if the song already exists by using the title and artist
       title = formatString(title);
       artist = formatString(artist);
 
       const song = await this.songData.getSongByTitleAndArtist(title, artist);
       if (song) {
-        throw new Error("Song already exists");
+        throw new CustomError("Song already exists", 409);
       }
 
       const id = generateId();
       const newSong: Song = new Song(id, title, artist, url, user.id);
       await this.songData.createSong(newSong);
     } catch (error: any) {
-      throw new Error(error.message);
+      throw new CustomError(error.message, error.statusCode);
     }
   };
 
   getSongById = async (id: string, token: string): Promise<Song> => {
     try {
       if (!id) {
-        throw new Error("Missing input");
+        throw new CustomError("Missing input", 422);
       }
       if (!token) {
-        throw new Error("Missing authorization token");
+        throw new CustomError("Missing authorization token", 422);
       }
       const user = this.authenticator.getTokenData(token);
       if (!user) {
-        throw new Error("Unauthorized");
+        throw new CustomError("Unauthorized", 401);
       }
       const song = await this.songData.getSongById(id);
       if (!song) {
-        throw new Error("Song not found");
+        throw new CustomError("Song not found", 404);
       }
       return song;
     } catch (error: any) {
-      throw new Error(error.message);
+      throw new CustomError(error.message, error.statusCode);
     }
   };
 
   deleteSong = async (id: string, token: string): Promise<void> => {
     try {
       if (!id) {
-        throw new Error("Missing input");
+        throw new CustomError("Missing input", 422);
       }
       if (!token) {
-        throw new Error("Missing authorization token");
+        throw new CustomError("Missing authorization token", 422);
       }
       const user = this.authenticator.getTokenData(token);
       if (!user) {
-        throw new Error("Unauthorized");
+        throw new CustomError("Unauthorized", 401);
       }
       const song = await this.songData.getSongById(id);
       if (!song) {
-        throw new Error("Song not found");
+        throw new CustomError("Song not found", 404);
       }
       if (song.userId !== user.id) {
-        throw new Error("Only the owner can delete the song");
+        throw new CustomError("Only the owner can delete the song", 401);
       }
 
       await this.songData.deleteSong(id);
     } catch (error: any) {
-      throw new Error(error.message);
+      throw new CustomError(error.message, error.statusCode);
     }
   };
 
   getAllSongs = async (token: string): Promise<Song[]> => {
     try {
       if (!token) {
-        throw new Error("Missing authorization token");
+        throw new CustomError("Missing authorization token", 422);
       }
       const user = this.authenticator.getTokenData(token);
       if (!user) {
-        throw new Error("Unauthorized");
+        throw new CustomError("Unauthorized", 401);
       }
       const songs = await this.songData.getAllSongs();
       return songs;
     } catch (error: any) {
-      throw new Error(error.message);
+      throw new CustomError(error.message, error.statusCode);
     }
-  }
+  };
 
-  editSong = async (id: string, token: string, title: string, artist: string, url: string): Promise<void> => {
+  editSong = async (
+    id: string,
+    token: string,
+    title: string,
+    artist: string,
+    url: string
+  ): Promise<void> => {
     try {
       if (!id || !token || (!title && !artist && !url)) {
         throw new CustomError("Missing input", 422);
@@ -130,14 +135,15 @@ export class SongBusiness {
         throw new CustomError("Only the owner can edit the song", 401);
       }
 
-      if(title) {
+      if (title) {
         title = formatString(title);
       }
-      if(artist) {
+      if (artist) {
         artist = formatString(artist);
       }
 
-      const songWithSameTitleAndArtist = await this.songData.getSongByTitleAndArtist(title, artist);
+      const songWithSameTitleAndArtist =
+        await this.songData.getSongByTitleAndArtist(title, artist);
       if (songWithSameTitleAndArtist) {
         throw new CustomError("Song already exists", 409);
       }
@@ -146,5 +152,5 @@ export class SongBusiness {
     } catch (error: any) {
       throw new CustomError(error.message, error.statusCode);
     }
-  }
+  };
 }

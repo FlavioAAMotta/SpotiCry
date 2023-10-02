@@ -17,7 +17,6 @@ export class UserController {
   login = async (req: Request, res: Response): Promise<void> => {
     try {
       const { email, password } = req.body;
-      console.log(`email: ${email}`)
       const token = await this.userBusiness.login({ email, password });
       res.status(200).send({ token });
     } catch (error: any) {

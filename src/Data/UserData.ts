@@ -11,7 +11,6 @@ export default class UserData implements IUserData {
       const snapshot = await userRef.where("email", "==", email).get();
 
       if (snapshot.empty) {
-        console.log("No matching documents.");
         return null;
       }
 
