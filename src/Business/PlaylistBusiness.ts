@@ -21,13 +21,12 @@ export class PlaylistBusiness {
 
   createPlaylist = async (
     token: string,
-    userId: string,
     songs: string[],
     description: string,
     name: string
   ): Promise<void> => {
     try {
-      if (!userId || !songs || !description || !name) {
+      if (!songs || !description || !name) {
         throw new CustomError("Missing input", 400);
       }
       if (!token) {
@@ -41,7 +40,7 @@ export class PlaylistBusiness {
       this.checkIfSongExists(songs);
 
       const id = generateId();
-      const playlist = new Playlist(id, name, description, songs, userId);
+      const playlist = new Playlist(id, name, description, songs, user.id);
       await this.playlistData.createPlaylist(playlist);
     } catch (error: any) {
       throw new CustomError(error.message, error.statusCode);
@@ -168,6 +167,10 @@ export class PlaylistBusiness {
         throw new CustomError("Playlist not found", 404);
       }
 
+      if (playlist.userId !== user.id) {
+        throw new CustomError("Unauthorized", 401);
+      }
+
       const songs = playlist.songs;
       songs.push(songId);
       await this.playlistData.updatePlaylistSongs(playlistId, songs);
@@ -176,9 +179,9 @@ export class PlaylistBusiness {
     }
   };
 
-  deletePlaylist = async (id: string, token: string): Promise<void> => {
+  deletePlaylist = async (playlistId: string, token: string): Promise<void> => {
     try {
-      if (!id) {
+      if (!playlistId) {
         throw new CustomError("Missing input", 400);
       }
       if (!token) {
@@ -188,8 +191,16 @@ export class PlaylistBusiness {
       if (!user) {
         throw new CustomError("Unauthorized", 401);
       }
+      const playlist = await this.playlistData.getPlaylistById(playlistId);
+      if (!playlist) {
+        throw new CustomError("Playlist not found", 404);
+      }
 
-      await this.playlistData.deletePlaylist(id);
+      if (playlist.userId !== user.id) {
+        throw new CustomError("Unauthorized", 401);
+      }
+
+      await this.playlistData.deletePlaylist(playlistId);
     } catch (error: any) {
       throw new CustomError(error.message, error.statusCode || 500);
     }
@@ -216,9 +227,17 @@ export class PlaylistBusiness {
       if (!playlist) {
         throw new CustomError("Playlist not found", 404);
       }
+      if (playlist.userId !== user.id) {
+        throw new CustomError("Unauthorized", 401);
+      }
 
       const songs = playlist.songs;
       const filteredSongs = songs.filter((song) => song !== songId);
+
+      if (filteredSongs.length === songs.length) {
+        throw new CustomError("Song not found in playlist", 404);
+      }
+
       await this.playlistData.updatePlaylistSongs(playlistId, filteredSongs);
     } catch (error: any) {
       throw new CustomError(error.message, error.statusCode || 500);
@@ -226,13 +245,13 @@ export class PlaylistBusiness {
   };
 
   updatePlaylist = async (
-    id: string,
+    playlistId: string,
     name: string,
     description: string,
     token: string
   ): Promise<void> => {
     try {
-      if (!id || (!name && !description)) {
+      if (!playlistId || (!name && !description)) {
         throw new CustomError("Missing input", 400);
       }
       if (!token) {
@@ -242,8 +261,16 @@ export class PlaylistBusiness {
       if (!user) {
         throw new CustomError("Unauthorized", 401);
       }
+      const playlist = await this.playlistData.getPlaylistById(playlistId);
+      if (!playlist) {
+        throw new CustomError("Playlist not found", 404);
+      }
 
-      await this.playlistData.updatePlaylist(id, name, description);
+      if (playlist.userId !== user.id) {
+        throw new CustomError("Unauthorized", 401);
+      }
+
+      await this.playlistData.updatePlaylist(playlistId, name, description);
     } catch (error: any) {
       throw new CustomError(error.message, error.statusCode || 500);
     }
