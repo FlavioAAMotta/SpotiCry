@@ -32,11 +32,11 @@ Execute o comando `npm start` no diretório do projeto para iniciar o servidor d
 
 ## Documentação da API
 
-A documentação completa da API pode ser encontrada ...
+A documentação completa da API pode ser encontrada no link https://documenter.getpostman.com/view/20306176/2s9YJc23Ap
 
 ## Contato
 
-Se tiver alguma dúvida, sinta-se à vontade para nos contatar.
+Se tiver alguma dúvida, sinta-se à vontade para contatar.
 
 ---
 
