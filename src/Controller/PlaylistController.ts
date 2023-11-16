@@ -102,5 +102,17 @@ export class PlaylistController {
     } catch (error: any) {
       res.status(error.statusCode || 400).send({ error: error.message });
     }
-  }
+  };
+
+  getPlaylistByUser = async (req:Request, res: Response): Promise<void> => {
+    try{
+        const token = req.headers.authorization as string;
+        const userId = req.params.userId;
+        const playlists = await this.playlistBusiness.getPlaylistByUser(userId,token)
+        res.status(200).send({ playlists })
+    }catch (error: any) {
+        res.status(error.statusCode || 400).send({ error: error.message });
+    }
+  };
+
 }
