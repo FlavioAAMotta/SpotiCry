@@ -167,7 +167,7 @@ export default class PlaylistData implements IPlaylistData {
         }
     };
 
-    async getPlaylistUser(userId: string): Promise<Playlist[]> {
+    async getPlaylistByUserId(userId: string): Promise<Playlist[]> {
         try {
             const playlists: Playlist[] = []
             const playlistRef = await db

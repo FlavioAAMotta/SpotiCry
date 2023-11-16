@@ -276,7 +276,7 @@ export class PlaylistBusiness {
         }
     };
 
-    getPlaylistByUser = async (userId: string, token: string): Promise<Playlist[]> => {
+    getPlaylistByUserId = async (userId: string, token: string): Promise<Playlist[]> => {
         try {
             if (!userId) {
                 throw new CustomError("Missing input", 400);
@@ -290,7 +290,7 @@ export class PlaylistBusiness {
                 throw new CustomError("Unauthorized", 401);
             }
 
-            return this.playlistData.getPlaylistUser(userId)
+            return this.playlistData.getPlaylistByUserId(userId)
         } catch (error: any) {
             throw new CustomError(error.message, error.statusCode || 500);
         }

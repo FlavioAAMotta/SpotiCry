@@ -10,5 +10,5 @@ export interface IPlaylistData{
     deletePlaylist(id:string):Promise<void>
     removeSongFromPlaylist(id:string, songId:string):Promise<void>
     updatePlaylist(id:string, title:string, description:string):Promise<void>
-    getPlaylistUser(userId:string): Promise<Playlist[]>
+    getPlaylistByUserId(userId:string): Promise<Playlist[]>
 }
