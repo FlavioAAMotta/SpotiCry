@@ -23,10 +23,11 @@ export class PlaylistBusiness {
         token: string,
         songs: string[],
         description: string,
-        name: string
+        name: string,
+        imageURL: string
     ): Promise<void> => {
         try {
-            if (!songs || !description || !name) {
+            if (!songs || !description || !name || !imageURL) {
                 throw new CustomError("Missing input", 400);
             }
             if (!token) {
@@ -40,7 +41,7 @@ export class PlaylistBusiness {
             this.checkIfSongExists(songs);
 
             const id = generateId();
-            const playlist = new Playlist(id, name, description, songs, user.id);
+            const playlist = new Playlist(id, name, description, songs, user.id, imageURL);
             await this.playlistData.createPlaylist(playlist);
         } catch (error: any) {
             throw new CustomError(error.message, error.statusCode);
@@ -248,10 +249,11 @@ export class PlaylistBusiness {
         playlistId: string,
         name: string,
         description: string,
-        token: string
+        token: string,
+        imageURL: string
     ): Promise<void> => {
         try {
-            if (!playlistId || (!name && !description)) {
+            if (!playlistId || (!name && !description && !imageURL)) {
                 throw new CustomError("Missing input", 400);
             }
             if (!token) {
@@ -270,7 +272,7 @@ export class PlaylistBusiness {
                 throw new CustomError("Unauthorized", 401);
             }
 
-            await this.playlistData.updatePlaylist(playlistId, name, description);
+            await this.playlistData.updatePlaylist(playlistId, name, description, imageURL);
         } catch (error: any) {
             throw new CustomError(error.message, error.statusCode || 500);
         }

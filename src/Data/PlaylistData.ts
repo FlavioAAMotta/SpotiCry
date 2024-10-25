@@ -13,6 +13,7 @@ export default class PlaylistData implements IPlaylistData {
                 description: playlist.description,
                 songs: playlist.songs,
                 userId: playlist.userId,
+                imageURL: playlist.imageURL,
             });
         } catch (error: any) {
             throw new Error(error.message);
@@ -33,7 +34,8 @@ export default class PlaylistData implements IPlaylistData {
                     playlistData?.name,
                     playlistData?.description,
                     playlistData?.songs,
-                    playlistData?.userId
+                    playlistData?.userId,
+                    playlistData?.imageURL
                 );
             });
         } catch (error: any) {
@@ -53,7 +55,8 @@ export default class PlaylistData implements IPlaylistData {
                         playlistData.name,
                         playlistData.description,
                         playlistData.songs,
-                        playlistData.userId
+                        playlistData.userId,
+                        playlistData.imageURL
                     )
                 );
             });
@@ -78,7 +81,8 @@ export default class PlaylistData implements IPlaylistData {
                         playlistData.name,
                         playlistData.description,
                         playlistData.songs,
-                        playlistData.userId
+                        playlistData.userId,
+                        playlistData.imageURL
                     )
                 );
             });
@@ -102,7 +106,8 @@ export default class PlaylistData implements IPlaylistData {
                     playlistData?.name,
                     playlistData?.description,
                     playlistData?.songs,
-                    playlistData?.userId
+                    playlistData?.userId,
+                    playlistData?.imageURL
                 );
             });
         } catch (error: any) {
@@ -147,7 +152,8 @@ export default class PlaylistData implements IPlaylistData {
     async updatePlaylist(
         id: string,
         title?: string,
-        description?: string
+        description?: string,
+        imageURL?: string
     ): Promise<void> {
         try {
             const updateData: { [key: string]: string } = {};
@@ -158,6 +164,10 @@ export default class PlaylistData implements IPlaylistData {
 
             if (description) {
                 updateData.description = description;
+            }
+
+            if (imageURL) {
+                updateData.imageURL = imageURL;
             }
 
             const docRef = db.collection("playlist").doc(id);
@@ -181,7 +191,8 @@ export default class PlaylistData implements IPlaylistData {
                     playlistData.name,
                     playlistData.description,
                     playlistData.songs,
-                    playlistData.userId
+                    playlistData.userId,
+                    playlistData.imageURL
                 ))
             })
             return playlists

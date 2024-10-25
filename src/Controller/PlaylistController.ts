@@ -7,8 +7,8 @@ export class PlaylistController {
   createPlaylist = async (req: Request, res: Response): Promise<void> => {
     try {
       const token = req.headers.authorization as string;
-      const { songs, description, name } = req.body;
-      await this.playlistBusiness.createPlaylist(token, songs, description, name);
+      const { songs, description, name, imageURL } = req.body;
+      await this.playlistBusiness.createPlaylist(token, songs, description, name, imageURL);
       res.status(200).send({ message: "Playlist created successfully" });
     } catch (error: any) {
       res.status(error.statusCode || 400).send({ error: error.message });
@@ -96,8 +96,8 @@ export class PlaylistController {
     try {
       const token = req.headers.authorization as string;
       const id = req.params.id;
-      const { name, description } = req.body;
-      await this.playlistBusiness.updatePlaylist(id, name, description, token);
+      const { name, description, imageURL } = req.body;
+      await this.playlistBusiness.updatePlaylist(id, name, description, token, imageURL);
       res.status(200).send({ message: "Playlist updated successfully" });
     } catch (error: any) {
       res.status(error.statusCode || 400).send({ error: error.message });

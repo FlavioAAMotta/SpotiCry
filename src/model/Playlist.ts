@@ -27,6 +27,15 @@ export default class Playlist {
     public set name(value: string) {
         this._name = value
     }
+
+    public get imageURL(): string {
+        return this._imageURL
+    }
+
+    public set imageURL(value: string) {
+        this._imageURL = value
+    }
+
     public get id(): string {
         return this._id
     }
@@ -39,6 +48,7 @@ export default class Playlist {
         private _name: string,
         private _description: string,
         private _songs: string[],
-        private _userId: string
+        private _userId: string,
+        private _imageURL: string
     ){}
 }
