@@ -18,7 +18,8 @@ export default class SongData implements ISongData {
           songData?.title,
           songData?.artist,
           songData?.url,
-          songData?.userId
+          songData?.userId,
+          songData?.albumImageURL,
         );
       });
     } catch (error: any) {
@@ -34,6 +35,7 @@ export default class SongData implements ISongData {
         artist: song.artist,
         url: song.url,
         userId: song.userId,
+        albumImageUrl: song.albumImageURL,
       });
     } catch (error: any) {
       throw new Error(error.message);
@@ -78,7 +80,8 @@ export default class SongData implements ISongData {
           songData.title,
           songData.artist,
           songData.url,
-          songData.userId
+          songData.userId,
+          songData.albumImageUrl
         );
       });
     } catch (error: any) {
@@ -90,7 +93,8 @@ export default class SongData implements ISongData {
     id: string,
     title?: string,
     artist?: string,
-    url?: string
+    url?: string,
+    albumImageURL?: string
   ): Promise<void> {
     try {
       const updateData: { [key: string]: string } = {};
@@ -102,6 +106,9 @@ export default class SongData implements ISongData {
       }
       if (url) {
         updateData.url = url;
+      }
+      if (albumImageURL) {
+        updateData.albumImageUrl = albumImageURL;
       }
       const docRef = db.collection("song").doc(id);
       await docRef.update(updateData);

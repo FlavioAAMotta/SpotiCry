@@ -4,6 +4,7 @@ export type songData = {
     artist: string;
     url: string;
     userId?: string;
+    albumImageURL?: string;
   };
   
   export default class Song {
@@ -12,7 +13,8 @@ export type songData = {
       private _title: string,
       private _artist: string,
       private _url: string,
-      private _userId?: string
+      private _userId?: string,
+      private _albumImageURL?: string
     ) {}
   
     public get artist(): string {
@@ -45,6 +47,12 @@ export type songData = {
     public set id(value: string) {
       this._id = value;
     }
+    public get albumImageURL(): string | undefined {
+      return this._albumImageURL;
+    }
+    public set albumImageURL(value: string) {
+      this._albumImageURL = value;
+    }
   
     toJSON(): songData {
       return {
@@ -53,6 +61,7 @@ export type songData = {
         artist: this.artist,
         url: this.url,
         userId: this.userId,
+        albumImageURL: this.albumImageURL,
       };
     }
   }

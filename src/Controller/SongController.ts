@@ -8,8 +8,8 @@ export class SongController{
     createSong = async (req: Request, res: Response): Promise<void> => {
         try {
             const token = req.headers.authorization as string;
-            const { title, artist, url } = req.body;
-            await this.songBusiness.createSong(token, title, artist, url);
+            const { title, artist, url, albumImageURL } = req.body;
+            await this.songBusiness.createSong(token, title, artist, url, albumImageURL);
             res.status(200).send({ message: "Song created successfully" });
         } catch (error: any) {
             res.status(error.statusCode || 400).send({ error: error.message });
@@ -52,8 +52,8 @@ export class SongController{
         try {
             const id = req.params.id;
             const token = req.headers.authorization as string;
-            const { title, artist, url } = req.body;
-            await this.songBusiness.editSong(id, token, title, artist, url);
+            const { title, artist, url, albumImageURL } = req.body;
+            await this.songBusiness.editSong(id, token, title, artist, url, albumImageURL);
             res.status(200).send({ message: "Song edited successfully" });
         } catch (error: any) {
             res.status(error.statusCode || 400).send({ error: error.message });

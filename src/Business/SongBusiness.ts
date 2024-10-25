@@ -18,7 +18,8 @@ export class SongBusiness {
     token: string,
     title: string,
     artist: string,
-    url: string
+    url: string,
+    albumImageURL: string
   ): Promise<void> => {
     try {
       if (!token) {
@@ -41,7 +42,10 @@ export class SongBusiness {
       }
 
       const id = generateId();
-      const newSong: Song = new Song(id, title, artist, url, user.id);
+      const index = Math.floor(Math.random() * 1000);
+      const getRandomAlbumImage = `https://robohash.org/${index}.png?size=300x300&set=set4`;
+      albumImageURL = albumImageURL || getRandomAlbumImage;
+      const newSong: Song = new Song(id, title, artist, url, user.id, albumImageURL);
       await this.songData.createSong(newSong);
     } catch (error: any) {
       throw new CustomError(error.message, error.statusCode);
@@ -117,10 +121,11 @@ export class SongBusiness {
     token: string,
     title: string,
     artist: string,
-    url: string
+    url: string,
+    albumImageURL: string
   ): Promise<void> => {
     try {
-      if (!id || !token || (!title && !artist && !url)) {
+      if (!id || !token || (!title && !artist && !url && !albumImageURL)) {
         throw new CustomError("Missing input", 422);
       }
       const user = this.authenticator.getTokenData(token);
@@ -148,7 +153,7 @@ export class SongBusiness {
         throw new CustomError("Song already exists", 409);
       }
 
-      await this.songData.editSong(id, title, artist, url);
+      await this.songData.editSong(id, title, artist, url, albumImageURL);
     } catch (error: any) {
       throw new CustomError(error.message, error.statusCode);
     }
